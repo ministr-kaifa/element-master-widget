@@ -18,7 +18,7 @@ export function getApplicationConfig(): ApplicationConfig {
     userId: searchParams.get("matrix_user_id") ?? undefined,
     displayName: searchParams.get("matrix_display_name") ?? undefined,
     avatarUrl: searchParams.get("matrix_avatar_url") ?? undefined,
-    roomId: searchParams.get("matrix_room_id") ?? undefined,
+    roomId: searchParams.get("matrix_room_id") ?? searchParams.get("room_id") ?? undefined,
     clientId: searchParams.get("clientId") ?? undefined,
     language: searchParams.get("matrix_client_language") ?? undefined,
     baseUrl:
