@@ -2,16 +2,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import { setToken } from "./utils/tokenStorage"
 
-export default function TokenPrompt({ onTokenSet }: { onTokenSet: () => void }) {
+export default function TokenPrompt({ onTokenSet }: Readonly<{ onTokenSet: (token: string) => void }>) {
   const [value, setValue] = useState("")
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!value.trim()) return
-    setToken(value.trim())
-    onTokenSet()
+    e.preventDefault();
+    const token = value.trim()
+    if (!token) return;
+    onTokenSet(token);
   }
 
   return (
@@ -28,7 +27,7 @@ export default function TokenPrompt({ onTokenSet }: { onTokenSet: () => void }) 
               type="text"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="API Token"
+              placeholder="Токен"
             />
             <Button type="submit">OK</Button>
           </form>
