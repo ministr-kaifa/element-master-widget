@@ -1,16 +1,28 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
-export default function TokenPrompt({ onTokenSet }: Readonly<{ onTokenSet: (token: string) => void }>) {
-  const [value, setValue] = useState("")
+export default function TokenPrompt({
+  onTokenSet,
+}: Readonly<{
+  onTokenSet: (token: string) => Promise<string>;
+}>) {
+  const [value, setValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const token = value.trim()
-    if (!token) return;
-    onTokenSet(token);
+    const token = value.trim();
+    if (!token) {
+      setErrorMessage("Пустой токен");
+      return;
+    }
+    const result = await onTokenSet(token);
+    if (result) {
+      setErrorMessage(result);
+    }
+    setValue("");
   }
 
   return (
@@ -22,17 +34,23 @@ export default function TokenPrompt({ onTokenSet }: Readonly<{ onTokenSet: (toke
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex gap-2">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <Input
               type="text"
               value={value}
-              onChange={(e) => setValue(e.target.value)}
+              onChange={e => {
+                setValue(e.target.value);
+                setErrorMessage("");
+              }}
               placeholder="Токен"
             />
-            <Button type="submit">OK</Button>
+            {errorMessage !== "" && (
+              <div className="text-red-600 text-sm mt-1">{errorMessage}</div>
+            )}
+            <Button type="submit" className="mt-2">OK</Button>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
