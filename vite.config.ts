@@ -15,7 +15,7 @@ export default defineConfig({
   //     key: fs.readFileSync('./certs/privkey.pem'),
   //     cert: fs.readFileSync('./certs/fullchain.pem'),
   //   },
-  //   host: '0.0.0.0', // чтобы можно было подключаться с других устройств
+  //   host: '0.0.0.0',
   //   port: 5173,
   // },
 });

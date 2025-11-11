@@ -13,11 +13,12 @@ export type ApplicationConfig = {
 
 export function getApplicationConfig(): ApplicationConfig {
   const searchParams = new URLSearchParams(window.location.search)
-  const matrixRoomId = searchParams.get("matrix_room_id");
-  const roomId = searchParams.get("room_id");
-  const finalRoomId = (matrixRoomId && matrixRoomId.trim() !== "" ? matrixRoomId
-                      : roomId && roomId.trim() !== "" ? roomId
-                      : undefined);
+  const finalRoomId = [searchParams.get("matrix_room_id"), searchParams.get("room_id")]
+    .filter(roomId => roomId !== "")
+    .filter(roomId => roomId !== "$matrix_room_id")
+    .filter(roomId => roomId)
+    [0] ?? undefined;
+
   console.log(`finalRoomId: ${finalRoomId}`);
   return {
     theme: searchParams.get("theme") ?? undefined,
